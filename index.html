@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Moving Companion</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDRU0gQykqW2GldIIRDEnnAXPIFtBIPSwk"></script>
+    <script type='text/javascript' src='js/libs/knockout-3.3.0.js'></script>
+</head>
+<body>
+
+    <form id="form-container" class="form-container" data-bind="submit: setNeighborhood">
+        <label for="street">Street: </label><input type="text" id="street" value="Questa Point">
+        <label for="city">City: </label><input type="text" id="city" value="San Diego">
+        <button id="submit-btn" type="submit">Submit</button>
+        
+    </form>
+    
+    <form id="interests-container" data-bind="submit: searchInterests">
+        <button id="search-btn" type="search">Look for </button>
+        <label> Things I find interesting-</label>
+
+        <label onclick="controller.displayInfo()"> Shops: </label><input type="checkbox" data-bind="checked: wantsShops">
+        <label>  Food: </label><input type="checkbox" data-bind="checked: wantsFood">
+        <label> Parks: </label><input type="checkbox" data-bind="checked: wantsParks">
+    </form>
+    
+    <br>
+    
+    <h2 class="greeting"></h2>
+    
+    <hr>
+
+    <h2 id="greeting" class="greeting">Where do you want to explore?</h2>
+
+    <div class="googlemap-container">
+        <h3 id="googlemap-header"></h3>
+        <div id="map-canvas">
+        
+        </div>
+    </div>
+    
+    <hr>
+    
+    <div>
+        <ul id="interest-list">
+            
+        </ul>
+    </div>
+    
+    <div class="wikipedia-container">
+        <h3 id="wikipedia-header">Relevant Wikipedia Links</h3>
+        <ul id="wikipedia-links">Type in an address above and find relevant Wikipedia articles here!</ul>
+    </div>
+
+
+    <div class="nytimes-container">
+        <h3 id="nytimes-header">New York Times Articles</h3>
+        <ul id="nytimes-articles" class="article-list">What's going on in your new city? Enter an address and hit submit and the NY Times will tell you here!</ul>
+    </div>
+    
+    <script src="js/libs/jquery.min.js"></script>
+    <!--<script src="js/script.js"></script>-->
+    <script src="js/MVC.js"></script>
+</body>
+</html>
