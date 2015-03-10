@@ -104,14 +104,16 @@ var controller = {
         //search for places of interest
         search.nearbySearch(request, function (results, status) {
             if (status != google.maps.places.PlacesServiceStatus.OK) {
-                alert("There was a problem looking for anything of interest" + status);
+                alert("There was a problem looking for anything of interest " + status);
                 return;
             } else {
                 //handle undefined destination
                 if (destination.property !== undefined) {
-                    alert("please enter a location to seaarch near first");
+                    alert("please enter a location to search near first");
                     return;
                 }
+                console.log("found " + results.length + " places")
+
                 //layout markers on the map and add them to an array
                 for (var i = 0; i < results.length; i++) {
                     var place = results[i];
@@ -130,58 +132,66 @@ var controller = {
         });
     },
 
-    /*
-    //attach information to display to list and on marker click
-                        for (var i = 0; i < results.length; i++) {
-                            var info = results[i];
-                            model.attachInfo(info, i);
-                        }
-    */
-
     findDetails: function (id, marker) {
         var search = new google.maps.places.PlacesService(map);
         //get details about places of interest
         search.getDetails(id, function (result, status) {
             if (status != google.maps.places.PlacesServiceStatus.OK) {
-                alert("There was a problem looking for anything of interest" + status);
+                //console.log("error found");
+                //alert("There was a problem getting details " + status);
                 return;
             } else {
                 //handle undefined destination
                 if (destination.property !== undefined) {
-                    alert("please enter a location to seaarch near first");
+                    alert("please enter a location to search near first");
                     return;
                 }
-
-                controller.attachInfo(result, marker);
+                //controller.attachInfo(result, marker);
+                var html = '<li class="interest-list-item" id="' + id.placeId + '">' +
+                            result.name + '</li>';
+                console.log(html);
+                $("#interest-list").append(html);
+                
+                document.getElementById(id.placeId).addEventListener("click", function() {
+                    view.displayInfo(result);
+                });
+                
+                console.log(id.placeId);
             }
         });
     },
 
     attachInfo: function (result, marker) {
         //set current marker to give info on
-
-        //console.log(result);
-
-        $("#interest-list").append('<li class="interest-list-item">' + result.name + '</li>');
+        console.log(result);
+        var el = $("#interest-list").append('<li class="interest-list-item">' + result.name + '</li>');
+        console.log(el);
         
+        //.addEventListener('click', view.displayInfo(result));
+
         var info = new google.maps.InfoWindow({
             content: "<p>" + result.name + "</p>"
         });
 
         google.maps.event.addDomListener(marker, 'click', function () {
             info.open(map, marker);
+            //view.displayInfo(result);
         });
-        $(".interest-list-item").on('click', controller.displayInfo);
-
-    },
-    
-    displayInfo: function () {
-        alert("hi");
+        //document.getElementsByName(".interest-list-item").addEventListener("click", view.displayInfo(result));
     }
 };
 
 var view = {
     render: function () {
+
+    },
+    
+    displayInfo: function (query) {
+        console.log("displayInfo: " + query);
+        //clear info
+        //$("#info-links").text('');
+        //add new info
+        $("#info-links").append('<li>' + query.name + ' is located at: ' + query.formatted_address + '</li>');
 
     }
 };

@@ -14,9 +14,18 @@ body {background-color: #CCC;}
     float: left;
 }
 
-#interests-container {
+#interests-checker {
     float: right;
 }
+
+#info-container {
+    float: right;
+}
+
+#interest-container {
+    float: left;
+}
+
 
 .greeting {
     color: black;
@@ -24,32 +33,12 @@ body {background-color: #CCC;}
     text-align: center;
 }
 
-.wikipedia-container {
+.info-container {
     float: right;
     width: 290px;
     padding: 10px;
     margin-right: 10px;
     background-color: rgba(255,255,255,0.7);
-}
-
-.nytimes-container {
-    padding: 10px;
-    margin-right: 300px;
-    background-color: rgba(255,255,255,0.7);
-}
-
-.article-list {
-    margin: 0;
-    padding: 0;
-}
-
-.article {
-    list-style-type: none;
-    padding: 10px;
-    border-top: 1px solid #CCC;
-}
-.article:first-child {
-    border-top:none;
 }
 
 .googlemap-container {

@@ -16,7 +16,7 @@
         
     </form>
     
-    <form id="interests-container" data-bind="submit: searchInterests">
+    <form id="interests-checker" data-bind="submit: searchInterests">
         <button id="search-btn" type="search">Look for </button>
         <label> Things I find interesting-</label>
 
@@ -35,32 +35,23 @@
 
     <div class="googlemap-container">
         <h3 id="googlemap-header"></h3>
-        <div id="map-canvas">
-        
-        </div>
+        <div id="map-canvas"></div>
     </div>
     
     <hr>
     
-    <div>
-        <ul id="interest-list">
-            
-        </ul>
+    <div id="interest-container">
+        <h3 id="interest-header">List of locations</h3>
+        <ul id="interest-list"></ul>
     </div>
     
-    <div class="wikipedia-container">
-        <h3 id="wikipedia-header">Relevant Wikipedia Links</h3>
-        <ul id="wikipedia-links">Type in an address above and find relevant Wikipedia articles here!</ul>
+    <div id="info-container">
+        <h3 id="info-header">Additional information</h3>
+        <ul id="info-links"></ul>
     </div>
 
-
-    <div class="nytimes-container">
-        <h3 id="nytimes-header">New York Times Articles</h3>
-        <ul id="nytimes-articles" class="article-list">What's going on in your new city? Enter an address and hit submit and the NY Times will tell you here!</ul>
-    </div>
     
     <script src="js/libs/jquery.min.js"></script>
-    <!--<script src="js/script.js"></script>-->
     <script src="js/MVC.js"></script>
 </body>
 </html>
