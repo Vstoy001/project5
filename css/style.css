@@ -18,14 +18,13 @@ body {background-color: #CCC;}
     float: right;
 }
 
-#info-container {
+#interest-container {
     float: right;
 }
 
-#interest-container {
-    float: left;
+#info-list {
+    list-style: none;
 }
-
 
 .greeting {
     color: black;
@@ -33,17 +32,24 @@ body {background-color: #CCC;}
     text-align: center;
 }
 
-.info-container {
+.interest-list-item {
+    padding: 5px;
+    border: 2px solid black;
+}
+
+#info-container {
     float: right;
-    width: 290px;
+    width: 40%;
     padding: 10px;
     margin-right: 10px;
     background-color: rgba(255,255,255,0.7);
 }
 
 .googlemap-container {
+    float: left;
+    width: 60%;
     height: 600px;
-    padding: 0 0 20px 0;
+    padding: 10px 10px 20px 30px;
 }
 
 #map-canvas { 

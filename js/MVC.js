@@ -69,10 +69,12 @@ var controller = {
                 var location = results[0].geometry.location;
                 map.setCenter(location);
                 //make marker at desired location
+
                 var marker = new google.maps.Marker({
                     map: map,
                     position: location
                 });
+
                 //set a reasonable zoom in and make sure marker is in view
                 map.setZoom(12);
                 map.panTo(location);
@@ -117,22 +119,16 @@ var controller = {
                 //layout markers on the map and add them to an array
                 for (var i = 0; i < results.length; i++) {
                     var place = results[i];
-                    var marker = new google.maps.Marker({
-                        map: map,
-                        position: place.geometry.location,
-                        placeId: results[i].place_id
-                    });
 
-                    interestMarkers.push(marker);
                     controller.findDetails({
-                        placeId: marker.placeId
-                    }, marker);
+                        placeId: results[i].place_id
+                    }); 
                 }
             }
         });
     },
 
-    findDetails: function (id, marker) {
+    findDetails: function (id) { 
         var search = new google.maps.places.PlacesService(map);
         //get details about places of interest
         search.getDetails(id, function (result, status) {
@@ -146,53 +142,80 @@ var controller = {
                     alert("please enter a location to search near first");
                     return;
                 }
-                //controller.attachInfo(result, marker);
-                var html = '<li class="interest-list-item" id="' + id.placeId + '">' +
-                            result.name + '</li>';
-                console.log(html);
-                $("#interest-list").append(html);
-                
-                document.getElementById(id.placeId).addEventListener("click", function() {
-                    view.displayInfo(result);
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: result.geometry.location,
                 });
-                
-                console.log(id.placeId);
+
+                interestMarkers.push(marker);
+                //attach information to markers and list
+                controller.attachInfo(id, result, marker);
             }
         });
     },
 
-    attachInfo: function (result, marker) {
-        //set current marker to give info on
-        console.log(result);
-        var el = $("#interest-list").append('<li class="interest-list-item">' + result.name + '</li>');
-        console.log(el);
-        
-        //.addEventListener('click', view.displayInfo(result));
+    attachInfo: function (id, result, marker) {
+        //build html for info list item
+        $("#interest-list").append('<li class="interest-list-item" id="' + id.placeId + '">' + result.name + ' -v- </li>');
 
+        //build html for list item content
+        $infoBox = $("#"+id.placeId);
+        var pContent = '<p id="infoFor' + id.placeId + '">';
+        pContent += '<br><span id="loc"> Located at: ' + result.vicinity + '.</span>';
+        /*
+        if(result.opening_hours.periods[0].length > 0) {
+            var startingTime = controller.convertTime(result.opening_hours.periods[0].open.time);
+            var closingTime = controller.convertTime(result.opening_hours.periods[0].close.time);
+            $infoBox.append('<br><span id="time"> Open from ' + startingTime + ' am to ' + closingTime + ' pm.</span>');    
+        } else {
+            $infoBox.append('<br><span id="time"> Could not get opening hours </span>');
+        }
+        */
+        pContent += '<br><span id="rating"> Rated at ' + result.rating + ' out of 5 stars! </span>';
+        pContent += '<br><span id="website"> Visit their <a href="' + result.website + '">website</a>.</span>';
+        pContent += '</p>'
+
+        $infoBox.append(pContent);
+           
+        //hide the description until user requested
+        $('#infoFor' + id.placeId).hide(0);
+
+        //view.displayInfo(id.placeId, result);
+        
+        //attach listener for clicking on list
+        document.getElementById(id.placeId).addEventListener("click", function () {
+            view.displayInfo(id.placeId, result);
+        });
+        //variable for google info window
         var info = new google.maps.InfoWindow({
             content: "<p>" + result.name + "</p>"
         });
-
+        //view.setMarker(marker, result.icon);
+        
+        //attach listener for clicking on marker
         google.maps.event.addDomListener(marker, 'click', function () {
             info.open(map, marker);
-            //view.displayInfo(result);
+            view.displayInfo(id.placeId, result);
         });
-        //document.getElementsByName(".interest-list-item").addEventListener("click", view.displayInfo(result));
+    },
+
+    convertTime: function (time) {
+        var t = time / 100;
+        if (t > 12) {
+            t -= 12;
+        }
+        return t;
     }
 };
 
 var view = {
-    render: function () {
-
+    setMarker: function (marker, icon) {
+        marker.setIcon(icon);
     },
-    
-    displayInfo: function (query) {
-        console.log("displayInfo: " + query);
-        //clear info
-        //$("#info-links").text('');
-        //add new info
-        $("#info-links").append('<li>' + query.name + ' is located at: ' + query.formatted_address + '</li>');
 
+    displayInfo: function (id, query) {
+        console.log("toggling: " + id + " for " + query.name);
+        $('#infoFor' + id).toggle('drop');
     }
 };
 
