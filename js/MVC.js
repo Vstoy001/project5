@@ -18,14 +18,27 @@ var model = {
         //return the map to be used as a global var
         return map;
     },
-    /*    
-        map = model.initMap(),
-        
-        addMarker: function (marker) {
-            interestMarkers.push(marker);
+    
+    updateInterests: function () {
+        var interestArray = [];
+        if (wantsShops == true) {
+            interestArray.push('store');
+            interestArray.push('shopping_mall');
+            interestArray.push('convenience_store');
+            interestArray.push('home_goods_store');
         }
-    */
-
+        if (wantsFood == true) {
+            interestArray.push('food');
+            interestArray.push('bar');
+        }
+        if (wantsParks == true) {
+            interestArray.push('park');
+            interestArray.push('campground');
+            interestArray.push('lodging');
+        }
+        console.log("interests of: " + interestArray);
+        return interestArray;
+    }
 };
 
 var wantsShops = false;
@@ -33,23 +46,6 @@ var wantsFood = false;
 var wantsParks = false;
 
 var controller = {
-    updateInterests: function () {
-        var interestArray = [];
-        if (wantsShops == true) {
-            interestArray.push('store');
-            interestArray.push('shopping_mall');
-        }
-        if (wantsFood == true) {
-            interestArray.push('food');
-        }
-        if (wantsParks == true) {
-            interestArray.push('park');
-        }
-        console.log("interests of: " + interestArray);
-        return interestArray;
-    },
-
-
     setNeighborhood: function () {
         //get data from the query box
         var city = $('#city').val();
@@ -86,7 +82,7 @@ var controller = {
 
     searchInterests: function () {
         //get user interests to search for
-        var interests = controller.updateInterests();
+        var interests = model.updateInterests();
         //set current interest markers' map to null to clear off the map
         for (var i = 0; i < interestMarkers.length; i++) {
             interestMarkers[i].setMap(null);
@@ -161,18 +157,11 @@ var controller = {
         //build html for list item content
         $infoBox = $("#"+id.placeId);
         var pContent = '<p id="infoFor' + id.placeId + '">';
-        pContent += '<br><span id="loc"> Located at: ' + result.vicinity + '.</span>';
-        /*
-        if(result.opening_hours.periods[0].length > 0) {
-            var startingTime = controller.convertTime(result.opening_hours.periods[0].open.time);
-            var closingTime = controller.convertTime(result.opening_hours.periods[0].close.time);
-            $infoBox.append('<br><span id="time"> Open from ' + startingTime + ' am to ' + closingTime + ' pm.</span>');    
-        } else {
-            $infoBox.append('<br><span id="time"> Could not get opening hours </span>');
+        pContent += 'Located at: ' + result.vicinity + '.';
+        if(result.rating !== undefined) {   
+            pContent += '<br> Average rating at ' + result.rating + ' out of 5 stars!';
         }
-        */
-        pContent += '<br><span id="rating"> Rated at ' + result.rating + ' out of 5 stars! </span>';
-        pContent += '<br><span id="website"> Visit their <a href="' + result.website + '">website</a>.</span>';
+        pContent += '<br> Visit their <a href="' + result.website + '">website</a>.';
         pContent += '</p>'
 
         $infoBox.append(pContent);

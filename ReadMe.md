@@ -1,0 +1,2 @@
+Use the street and city boxes for query on neighborhood. 
+Use checkboxes to specify interests. The clostest 20 locations will be marked on the map. Click on the marker or the name of the interest from the list to see additional details.
