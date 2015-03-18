@@ -1,5 +1,5 @@
 //global var to hold place queried
-var destination;
+var destination = "";
 //global var to hold markers of interests to reset
 var interestMarkers = [];
 
@@ -18,7 +18,7 @@ var model = {
         //return the map to be used as a global var
         return map;
     },
-    
+
     updateInterests: function () {
         var interestArray = [];
         if (wantsShops == true) {
@@ -38,6 +38,15 @@ var model = {
         }
         console.log("interests of: " + interestArray);
         return interestArray;
+    },
+
+    poll: function () {
+        console.log("polling for connection");
+
+        var state = navigator.onLine ? "online" : "offline";
+        if(state == "offline") {
+            alert('lost connection');
+        }
     }
 };
 
@@ -45,12 +54,17 @@ var wantsShops = false;
 var wantsFood = false;
 var wantsParks = false;
 
+
 var controller = {
+    setCity: "",
+    setStreet: "",
+
     setNeighborhood: function () {
-        //get data from the query box
-        var city = $('#city').val();
-        var street = $('#street').val();
-        var query = city + ", " + street;
+        //check for internet connection
+        model.poll();
+        //clear destination for new value
+        destination = "";
+        var query = controller.setCity + ", " + controller.setStreet;
         //setup geocoder
         var finder = new google.maps.Geocoder();
         //locate the address user input
@@ -81,6 +95,11 @@ var controller = {
     },
 
     searchInterests: function () {
+        //handle undefined destination
+        if (destination == "") {
+            alert("please enter a location to search near first");
+            return;
+        }
         //get user interests to search for
         var interests = model.updateInterests();
         //set current interest markers' map to null to clear off the map
@@ -91,6 +110,8 @@ var controller = {
         //clear out html in list to populate with new info
         $(".interest-list-item").remove();
 
+        //check for internet connection
+        model.poll();
         //request is centered on the location that was queried earlier
         var request = {
             location: destination,
@@ -105,11 +126,6 @@ var controller = {
                 alert("There was a problem looking for anything of interest " + status);
                 return;
             } else {
-                //handle undefined destination
-                if (destination.property !== undefined) {
-                    alert("please enter a location to search near first");
-                    return;
-                }
                 console.log("found " + results.length + " places")
 
                 //layout markers on the map and add them to an array
@@ -118,26 +134,22 @@ var controller = {
 
                     controller.findDetails({
                         placeId: results[i].place_id
-                    }); 
+                    });
                 }
             }
         });
     },
 
-    findDetails: function (id) { 
+    findDetails: function (id) {
+        //check for internet connection
+        model.poll();
         var search = new google.maps.places.PlacesService(map);
         //get details about places of interest
         search.getDetails(id, function (result, status) {
             if (status != google.maps.places.PlacesServiceStatus.OK) {
-                //console.log("error found");
                 //alert("There was a problem getting details " + status);
                 return;
             } else {
-                //handle undefined destination
-                if (destination.property !== undefined) {
-                    alert("please enter a location to search near first");
-                    return;
-                }
                 var marker = new google.maps.Marker({
                     map: map,
                     position: result.geometry.location,
@@ -155,22 +167,22 @@ var controller = {
         $("#interest-list").append('<li class="interest-list-item" id="' + id.placeId + '">' + result.name + ' -v- </li>');
 
         //build html for list item content
-        $infoBox = $("#"+id.placeId);
+        $infoBox = $("#" + id.placeId);
         var pContent = '<p id="infoFor' + id.placeId + '">';
         pContent += 'Located at: ' + result.vicinity + '.';
-        if(result.rating !== undefined) {   
+        if (result.rating !== undefined) {
             pContent += '<br> Average rating at ' + result.rating + ' out of 5 stars!';
         }
         pContent += '<br> Visit their <a href="' + result.website + '">website</a>.';
         pContent += '</p>'
 
         $infoBox.append(pContent);
-           
+
         //hide the description until user requested
         $('#infoFor' + id.placeId).hide(0);
 
         //view.displayInfo(id.placeId, result);
-        
+
         //attach listener for clicking on list
         document.getElementById(id.placeId).addEventListener("click", function () {
             view.displayInfo(id.placeId, result);
@@ -180,7 +192,7 @@ var controller = {
             content: "<p>" + result.name + "</p>"
         });
         //view.setMarker(marker, result.icon);
-        
+
         //attach listener for clicking on marker
         google.maps.event.addDomListener(marker, 'click', function () {
             info.open(map, marker);

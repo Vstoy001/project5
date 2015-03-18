@@ -1,2 +1,2 @@
-Use the street and city boxes for query on neighborhood. 
-Use checkboxes to specify interests. The clostest 20 locations will be marked on the map. Click on the marker or the name of the interest from the list to see additional details.
+Use the street and city boxes to specify a search for a location to mark as the neighborhood. 
+Use checkboxes to specify interests, searching for interests without a neighborhood will not work. The closest 20 locations to the neighborhood will be marked on the map. Click on the marker or the name of the interest from the list to see additional details.

@@ -2,8 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
     <title>Your Moving Companion</title>
     <link rel="stylesheet" href="css/style.css">
+    
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDRU0gQykqW2GldIIRDEnnAXPIFtBIPSwk"></script>
     <script type='text/javascript' src='js/libs/knockout-3.3.0.js'></script>
 </head>
@@ -15,8 +18,8 @@
     <hr>
     
     <form id="form-container" class="form-container" data-bind="submit: setNeighborhood">
-        <label for="street">Street: </label><input type="text" id="street" value="Questa Point">
-        <label for="city">City: </label><input type="text" id="city" value="San Diego">
+        <label for="street">Street: </label><input type="text" id="street" value="" data-bind="textInput: setStreet">
+        <label for="city">City: </label><input type="text" id="city" value="" data-bind="textInput: setCity">
         <button id="submit-btn" type="submit">Submit</button>
         
     </form>
@@ -43,13 +46,7 @@
         <h3 id="interest-header">List of locations</h3>
         <ul id="interest-list"></ul>
     </div>
-    
-    <!--
-    <div id="info-container">
-        <h3 id="info-header">Additional information</h3>
-        <p id="info-list"></p>
-    </div>
-    -->
+
     <script src="js/libs/jquery.min.js"></script>
     <script src="js/MVC.js"></script>
 </body>
