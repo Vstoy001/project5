@@ -5,6 +5,7 @@ var interestMarkers = [];
 
 var model = {
     initMap: function () {
+        model.poll();
         //setup a google map at full zoom out
         var map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions = {
@@ -45,7 +46,7 @@ var model = {
 
         var state = navigator.onLine ? "online" : "offline";
         if(state == "offline") {
-            alert('lost connection');
+            alert('lost connection to internet');
         }
     }
 };
