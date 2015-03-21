@@ -1,3 +1,4 @@
+
 //global var to hold place queried
 var destination = "";
 //global var to hold markers of interests to reset
@@ -22,17 +23,17 @@ var model = {
 
     updateInterests: function () {
         var interestArray = [];
-        if (wantsShops == true) {
+        if (wantsShops === true) {
             interestArray.push('store');
             interestArray.push('shopping_mall');
             interestArray.push('convenience_store');
             interestArray.push('home_goods_store');
         }
-        if (wantsFood == true) {
+        if (wantsFood === true) {
             interestArray.push('food');
             interestArray.push('bar');
         }
-        if (wantsParks == true) {
+        if (wantsParks === true) {
             interestArray.push('park');
             interestArray.push('campground');
             interestArray.push('lodging');
@@ -97,7 +98,7 @@ var controller = {
 
     searchInterests: function () {
         //handle undefined destination
-        if (destination == "") {
+        if (destination === "") {
             alert("please enter a location to search near first");
             return;
         }
@@ -127,12 +128,10 @@ var controller = {
                 alert("There was a problem looking for anything of interest " + status);
                 return;
             } else {
-                console.log("found " + results.length + " places")
+                console.log("found " + results.length + " places");
 
                 //layout markers on the map and add them to an array
                 for (var i = 0; i < results.length; i++) {
-                    var place = results[i];
-
                     controller.findDetails({
                         placeId: results[i].place_id
                     });
@@ -168,21 +167,19 @@ var controller = {
         $("#interest-list").append('<li class="interest-list-item" id="' + id.placeId + '">' + result.name + ' -v- </li>');
 
         //build html for list item content
-        $infoBox = $("#" + id.placeId);
+        var $infoBox = $("#" + id.placeId);
         var pContent = '<p id="infoFor' + id.placeId + '">';
         pContent += 'Located at: ' + result.vicinity + '.';
         if (result.rating !== undefined) {
             pContent += '<br> Average rating at ' + result.rating + ' out of 5 stars!';
         }
         pContent += '<br> Visit their <a href="' + result.website + '">website</a>.';
-        pContent += '</p>'
+        pContent += '</p>';
 
         $infoBox.append(pContent);
 
         //hide the description until user requested
         $('#infoFor' + id.placeId).hide(0);
-
-        //view.displayInfo(id.placeId, result);
 
         //attach listener for clicking on list
         document.getElementById(id.placeId).addEventListener("click", function () {
@@ -192,8 +189,7 @@ var controller = {
         var info = new google.maps.InfoWindow({
             content: "<p>" + result.name + "</p>"
         });
-        //view.setMarker(marker, result.icon);
-
+        
         //attach listener for clicking on marker
         google.maps.event.addDomListener(marker, 'click', function () {
             info.open(map, marker);
@@ -222,6 +218,4 @@ var view = {
 };
 
 ko.applyBindings(controller);
-//ko.applyBindings(controller);
-//ko.applyBindings(view);
 var map = model.initMap();
